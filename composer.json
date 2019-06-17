@@ -1,0 +1,41 @@
+{
+    "name": "thejoshsmith/craft-expanded-matrix",
+    "description": "Curate your matrix content at full screen.",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "expanded matrix",
+        "matrix"
+    ],
+    "support": {
+        "docs": "https://github.com/thejoshsmith/craft-expanded-matrix/blob/master/README.md",
+        "issues": "https://github.com/thejoshsmith/craft-expanded-matrix/issues"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Josh Smith <me@joshsmith.dev>",
+            "homepage": "https://www.joshsmith.dev"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "thejoshsmith\\craftexpandedmatrix\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Expanded Matrix",
+        "handle": "expanded-matrix",
+        "hasCpSettings": false,
+        "hasCpSection": false,
+        "changelogUrl": "https://raw.githubusercontent.com/thejoshsmith/craft-expanded-matrix/master/CHANGELOG.md",
+        "class": "thejoshsmith\\craftexpandedmatrix\\Plugin"
+    }
+}
