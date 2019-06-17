@@ -27,7 +27,7 @@ class ExpandedMatrixAsset extends AssetBundle
 
         $this->js = [
             'js/animatedModal.min.js',
-            'js/lightslider.min.js',
+            'js/touchswipe.min.js',
             'js/expandedMatrix.js',
         ];
 

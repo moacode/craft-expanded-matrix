@@ -34,6 +34,7 @@
 
             // Add an event listener to open a matrix block modal
             this.addListener($expandBlockLinks, 'click', function(ev) {
+                ev.preventDefault();
 
                 var $block = $(ev.target).parents('.matrixblock').eq(0),
                     $superBlocksContainer = $(ev.target).parents('.matrixLayoutContainer').eq(0),
@@ -92,9 +93,7 @@
 
             // Attach an event handler to close the modal on esc key
             $(document).on('keyup', function(ev){
-                if(ev.keyCode == 27) {
-                    self.$el.find('.close-'+self.getModalId()).trigger('click');
-                }
+                $(document).trigger('keyup.expandedmatrix', ev);
             });
 
             // On modal close
@@ -128,8 +127,6 @@
 
             // Hide the expand icons
             this.hideBlocksExpandIcons();
-
-            this.$blocks.detach();
             this.setCurrentBlock(blockNum);
 
             // Prevent the detachment from triggering an unsaved changed alert
@@ -144,7 +141,25 @@
         showBlocksExpandIcons: function(){
             return this.$blocks.find('.js--expandedmatrix-icon').show();
         },
+        displayPreviousBlock: function(){
+            var self = this;
+                $currentBlock = this.getCurrentBlock();
+            $currentBlock.addClass(this.settings.animations.leftOut).one(this.settings.animationEventEnd, function(){
+                $currentBlock.removeClass(self.settings.animations.leftOut);
+                self.displayBlock(self.getPreviousBlock(), self.settings.animations.rightIn);
+            });
+        },
+        displayNextBlock: function(){
+            var self = this;
+                $currentBlock = this.getCurrentBlock();
+            $currentBlock.addClass(this.settings.animations.rightOut).one(this.settings.animationEventEnd, function(){
+                $currentBlock.removeClass(self.settings.animations.rightOut);
+                self.displayBlock(self.getNextBlock(), self.settings.animations.leftIn);
+            });
+        },
         displayBlock: function(blockNum, animateClasses){
+
+            this.clearBlocksAnimationClasses();
 
             var $currentBlock = this.getCurrentBlock();
             $currentBlock.detach();
@@ -177,38 +192,60 @@
             });
 
             // On left/right arrow keypress
-            $(document).on('keyup', function(e){
+            $(document).on('keyup.expandedmatrix', function(e){
 
+                if(e.keyCode == 27) {
+                    self.$el.find('.close-'+self.getModalId()).trigger('click');
+                }
+
+                // Ensure the user isn't focused on an input
                 var $activeInput = $(this).find('input:focus, textarea:focus');
                 if( transitionKeyCodes.indexOf(e.keyCode) > -1 && !$activeInput.length ){
 
-                    var blockNum = e.keyCode === 37 ? self.getPreviousBlock() : self.getNextBlock(),
-                        $currentBlock = self.getCurrentBlock();
-
                     switch(e.keyCode){
-                        case 37:
-                            $currentBlock.addClass(self.settings.animations.leftOut).one(self.settings.animationEventEnd, function(){
-                                $currentBlock.removeClass(self.settings.animations.leftOut);
-                                self.displayBlock(blockNum, self.settings.animations.rightIn);
-                            });
+                        case 37: // Left key
+                            self.displayPreviousBlock();
                             break;
-                        case 39:
-                            $currentBlock.addClass(self.settings.animations.rightOut).one(self.settings.animationEventEnd, function(){
-                                $currentBlock.removeClass(self.settings.animations.rightOut);
-                                self.displayBlock(blockNum, self.settings.animations.leftIn);
-                            });
+                        case 39: // Right key
+                            self.displayNextBlock();
                             break;
                     }
                 }
-
+            });
+        },
+        clearBlocksAnimationClasses: function(){
+            var self = this;
+            $.each(self.settings.animations, function(k,animClass){
+                self.$blocks.removeClass(animClass);
             });
         },
         destroy: function(){
-            var $blocksContainer = $('.js--expandedmatrix-active');
+
+            var self = this,
+                $blocksContainer = $('.js--expandedmatrix-active');
+
+            // Remove trailing animation classes
+            this.clearBlocksAnimationClasses();
+
             this.showBlocksExpandIcons();
             this.$blocks.removeClass('expandedmatrix-active-block');
+            this.$blocks.detach();
+
             $blocksContainer.append(this.$blocks);
             $blocksContainer.removeClass('js--expandedmatrix-active');
+
+            // Set the scroll position to the last viewed matrix block
+            var $currentDomBlock = $('[data-id="'+this.getCurrentBlock().data('id')+'"]');
+            if( $currentDomBlock.length ){
+                var blockOffset = $currentDomBlock.offset().top;
+                $('#content').scrollTop(blockOffset - $('#content').offset().top);
+            }
+
+            this.$blocks = $();
+            this.setCurrentBlock(null);
+
+            // Remove event handler
+            $(document).off('keyup.expandedmatrix');
         },
         getPreviousBlock: function(){
             var numBlocks = this.$blocks.length - 1;
