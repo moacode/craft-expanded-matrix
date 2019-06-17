@@ -263,13 +263,13 @@
             options: {
                 color: '#333f4d',
                 zIndexIn: '100',
-                animationDuration: '.4s'
+                animationDuration: '.3s'
             },
             animations: {
-                leftIn: 'animated fadeInRight faster',
-                leftOut: 'animated fadeOutRight faster',
-                rightIn: 'animated fadeInLeft faster',
-                rightOut: 'animated fadeOutLeft faster',
+                leftIn: 'animated fadeInRight speed-300ms',
+                leftOut: 'animated fadeOutRight speed-300ms',
+                rightIn: 'animated fadeInLeft speed-300ms',
+                rightOut: 'animated fadeOutLeft speed-300ms',
                 fadeIn: 'animated fadeIn',
             },
             animationEventEnd: 'animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd'

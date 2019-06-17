@@ -26,3 +26,7 @@
 .expandedmatrix-modal-blocks {
 	width: calc(100vw - 100px);
 }
+.animated.speed-300ms {
+  -webkit-animation-duration: 300ms;
+  animation-duration: 300ms;
+}
