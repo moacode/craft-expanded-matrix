@@ -1,0 +1,28 @@
+/**
+ * CraftHQ plugin for Craft CMS
+ *
+ * CraftHQ CSS
+ *
+ * @author    Josh Smith
+ * @copyright Copyright (c) 2019 Josh Smith
+ * @link      https://joshsmith.dev
+ * @package   CraftHQ
+ * @since     1.0.0
+ */
+.expandedmatrix-icon {
+	padding: 0 8px 0 8px;
+}
+.expandedmatrix-manage-btn {
+	margin-bottom: 8px;
+}
+.expandedmatrix-active-block {
+	min-height: calc(100vh - 80px);
+}
+.expandedmatrix-modal-content {
+	margin-top: 10px;
+	display: flex;
+	justify-content: center;
+}
+.expandedmatrix-modal-blocks {
+	width: calc(100vw - 100px);
+}

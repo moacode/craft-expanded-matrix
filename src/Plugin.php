@@ -9,11 +9,11 @@
 
 namespace thejoshsmith\craftexpandedmatrix;
 
-
 use Craft;
 use craft\base\Plugin as CraftPlugin;
 use craft\services\Plugins;
 use craft\events\PluginEvent;
+use thejoshsmith\craftexpandedmatrix\web\assets\ExpandedMatrixAsset;
 
 use yii\base\Event;
 
@@ -53,6 +53,11 @@ class Plugin extends CraftPlugin
     {
         parent::init();
         self::$plugin = $this;
+
+        $request = Craft::$app->getRequest();
+        if( $request->getIsCpRequest() ){
+            ExpandedMatrixAsset::register(Craft::$app->view);
+        }
 
         Event::on(
             Plugins::class,
