@@ -194,6 +194,7 @@
             // On left/right arrow keypress
             $(document).on('keyup.expandedmatrix', function(e){
 
+                // Close the modal when esc is pressed
                 if(e.keyCode == 27) {
                     self.$el.find('.close-'+self.getModalId()).trigger('click');
                 }
