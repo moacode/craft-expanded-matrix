@@ -26,8 +26,7 @@
                 modalOptions = this.expandedMatrixModal.getOptions();
 
             // Add a new menu icon to the matrix blocks holder
-            var $expandBlockLinks = this.addMatrixExpandBlockLinks(modalId),
-                $expandBtn = this.addMatrixExpandBtn();
+            var $expandBlockLinks = this.addMatrixExpandBlockLinks(modalId);
 
             // Initiate the animated modal plugin
             $expandBlockLinks.animatedModal(modalOptions);
@@ -50,11 +49,6 @@
 
         addMatrixExpandBlockLinks: function(modalId){
             return $('<a title="Expand Matrix" href="#'+modalId+'" class="expand icon expandedmatrix-icon js--expandedmatrix-icon"/>').prependTo(this.$el.find('.actions'));
-        },
-
-        addMatrixExpandBtn: function(){
-            this.$el.find('.input.ltr').eq(0).addClass('clear');
-            return $('<div class="btn right expandedmatrix-manage-btn" data-icon="view">Manage Blocks</div>').appendTo(this.$el.find('.heading').eq(0));
         },
 
         initBlockModal: function($blocks, blockNum){
