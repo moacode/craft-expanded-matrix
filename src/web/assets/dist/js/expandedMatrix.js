@@ -187,17 +187,22 @@
                 }
             });
 
+            // Define elements that should be excluded from the touch swipe
+            var excludedElements = $.fn.swipe.defaults.excludedElements + ', button, input, select, textarea, a, div[contenteditable="true"], div.element';
+
             // Add touch capabilities to the block
             this.$el.swipe({
                 swipeRight: function(e){
                     e.preventDefault();
                     self.displayPreviousBlock();
-                }
+                },
+                excludedElements: excludedElements
             }).swipe({
                 swipeLeft: function(e){
                     e.preventDefault();
                     self.displayNextBlock();
-                }
+                },
+                excludedElements: excludedElements
             });
 
             $('.js--expandedmatrix-left').on('click', function(e){

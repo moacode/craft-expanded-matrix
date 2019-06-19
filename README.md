@@ -1,6 +1,6 @@
 # Expanded Matrix plugin for Craft CMS 3.x
 
-Curate your matrix content at full screen.
+Create your matrix content at full screen.
 
 ![Screenshot](resources/img/plugin-logo.png)
 
@@ -24,14 +24,23 @@ To install the plugin, follow these instructions.
 
 ## Expanded Matrix Overview
 
--Insert text here-
+This plugin allows you to create or edit matrix content in a full screen. You can navigate between blocks using:
 
-## Configuring Expanded Matrix
+* Arrow keys
+* Swiping gestures
+* Navigation links
 
--Insert text here-
+It even supports super table blocks!
 
 ## Using Expanded Matrix
 
--Insert text here-
+Once installed, an expand icon will appear on each matrix block. Click this to expand the modal.
+
+## Expanded Matrix Roadmap
+
+* Better layout + styling
+* Configurable modal colors / animations
+* Ability to view blocks as a grid
+* Re-order and add new blocks within the grid
 
 Brought to you by [Josh Smith <me@joshsmith.dev>](https://www.joshsmith.dev)

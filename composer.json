@@ -1,6 +1,6 @@
 {
     "name": "thejoshsmith/craft-expanded-matrix",
-    "description": "Curate your matrix content at full screen.",
+    "description": "Create your matrix content at full screen.",
     "type": "craft-plugin",
     "version": "1.0.0",
     "keywords": [

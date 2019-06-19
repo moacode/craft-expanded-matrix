@@ -77,8 +77,4 @@ class Plugin extends CraftPlugin
             __METHOD__
         );
     }
-
-    // Protected Methods
-    // =========================================================================
-
 }
