@@ -33,7 +33,6 @@ class ExpandedMatrixAsset extends AssetBundle
 
         $this->css = [
             'css/animate.min.css',
-            'css/lightslider.min.css',
             'css/expandedMatrix.css',
         ];
 
