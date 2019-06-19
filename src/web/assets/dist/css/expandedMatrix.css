@@ -12,21 +12,88 @@
 .expandedmatrix-icon {
 	padding: 0 8px 0 8px;
 }
-.expandedmatrix-manage-btn {
-	margin-bottom: 8px;
+.expandedmatrix-nav-icon {
+	position: fixed;
+	z-index: 999;
+	top: 50%;
+	font-size: 54px;
+	color: #FFF;
+	opacity: 0.4;
+	transform: translate(0%, -50%);
+	webkit-transition: opacity 0.2s;
+	-moz-transition: opacity 0.2s;
+	-ms-transition: opacity 0.2s;
+	-o-transition: opacity 0.2s;
+	transition: opacity 0.2s;
+}
+.expandedmatrix-nav-icon:hover {
+	opacity: 1;
+}
+.expandedmatrix-nav-icon--left {
+	left: 20px;
+}
+.expandedmatrix-nav-icon--left:before {
+	content: '\F0A8';
+}
+.expandedmatrix-nav-icon--right {
+	left: calc(100% - 68px);
+}
+.expandedmatrix-nav-icon--right:before {
+	content: '\F0A9';
 }
 .expandedmatrix-active-block {
-	min-height: calc(100vh - 80px);
+	height: 100%;
+	margin-bottom: 0;
 }
 .expandedmatrix-modal-content {
-	margin-top: 10px;
 	display: flex;
 	justify-content: center;
 }
 .expandedmatrix-modal-blocks {
-	width: calc(100vw - 100px);
+	width: calc(100vw - 180px);
+    min-height: calc(100vh - 110px);
+    padding: 48px 0 62px 0;
 }
 .animated.speed-300ms {
-  -webkit-animation-duration: 300ms;
-  animation-duration: 300ms;
+	-webkit-animation-duration: 300ms;
+	animation-duration: 300ms;
+}
+.expandedmatrix-close {
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	width: 32px;
+	height: 32px;
+	opacity: 0.3;
+	z-index: 999;
+
+	webkit-transition: all 0.2s;
+	-moz-transition: all 0.2s;
+	-ms-transition: all 0.2s;
+	-o-transition: all 0.2s;
+	transition: all 0.2s;
+}
+.expandedmatrix-close:hover {
+	opacity: 1;
+	-webkit-transform: rotate(90deg);
+	-moz-transform: rotate(90deg);
+	transform: rotate(90deg);
+}
+.expandedmatrix-close:before, .expandedmatrix-close:after {
+	position: absolute;
+	left: 15px;
+	content: ' ';
+	height: 33px;
+	width: 2px;
+	background-color: #FFF;
+}
+.expandedmatrix-close:before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.expandedmatrix-close:after {
+	-webkit-transform: rotate(-45deg);
+  	-moz-transform: rotate(-45deg);
+  	transform: rotate(-45deg);
 }

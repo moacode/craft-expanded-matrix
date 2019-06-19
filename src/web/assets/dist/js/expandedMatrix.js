@@ -80,7 +80,9 @@
             // Define the base modal markup
             this.$el = $(
                 '<div id="'+this.settings.modalId+'">' +
-                    '<div class="close-'+this.settings.modalId+'">CLOSE MODAL</div>'+
+                    '<a href="#" class="expandedmatrix-close close-'+this.settings.modalId+'"></a>'+
+                    '<a href="#" class="expandedmatrix-nav-icon expandedmatrix-nav-icon--left js--expandedmatrix-left icon"></a>'+
+                    '<a href="#" class="expandedmatrix-nav-icon expandedmatrix-nav-icon--right js--expandedmatrix-right icon"></a>'+
                     '<div class="modal-content expandedmatrix-modal-content"><div class="js--expandedmatrix-content expandedmatrix-modal-blocks"/></div>' +
                 '</div>'
             ).appendTo('body');
@@ -183,6 +185,29 @@
                 if( transitionKeyCodes.indexOf(e.keyCode) > -1 ){
                     e.stopPropagation();
                 }
+            });
+
+            // Add touch capabilities to the block
+            this.$el.swipe({
+                swipeRight: function(e){
+                    e.preventDefault();
+                    self.displayPreviousBlock();
+                }
+            }).swipe({
+                swipeLeft: function(e){
+                    e.preventDefault();
+                    self.displayNextBlock();
+                }
+            });
+
+            $('.js--expandedmatrix-left').on('click', function(e){
+                e.preventDefault();
+                self.displayPreviousBlock();
+            });
+
+            $('.js--expandedmatrix-right').on('click', function(e){
+                e.preventDefault();
+                self.displayNextBlock();
             });
 
             // On left/right arrow keypress
