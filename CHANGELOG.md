@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 ### Changed
 - Plugin is now initialised after the matrix object is created
 - Fixed a bug where a matrix with no blocks would cause modal element to overlay content
+- Fixed a bug where newly added matrix blocks didn't have the option to expand
 - Fixed a bug where using the ctrl/cmd + s shortcut would remove blocks from matrix
 
 ## 1.0.1 - 2019-06-20
