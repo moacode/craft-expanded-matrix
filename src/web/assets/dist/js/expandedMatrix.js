@@ -7,7 +7,7 @@
  * @copyright Copyright (c) 2019 Josh Smith
  * @link      https://www.joshsmith.dev
  * @package   Expanded Matrix
- * @since     1.0.0
+ * @since     1.0.2
  */
 ;(function($){
 
@@ -22,17 +22,30 @@
             this.$el = this.settings.$el;
             this.expandedMatrixModal = new Craft.ExpandedMatrixModal();
 
-            var modalId = this.expandedMatrixModal.getModalId(),
+            var self = this,
+                modalId = this.expandedMatrixModal.getModalId(),
                 modalOptions = this.expandedMatrixModal.getOptions();
 
             // Add a new menu icon to the matrix blocks holder
-            var $expandBlockLinks = this.addMatrixExpandBlockLinks(modalId);
+            var $expandBlockLinks = this.addMatrixExpandBlocksLink(this.$el.find('.blocks'), modalId);
 
             // Initiate the animated modal plugin
-            $expandBlockLinks.animatedModal(modalOptions);
+            if( $expandBlockLinks.length > 0 ) {
+                $expandBlockLinks.animatedModal(modalOptions);
+                this.attachExpandBlockClickHandler($expandBlockLinks);
+            }
 
-            // Add an event listener to open a matrix block modal
-            this.addListener($expandBlockLinks, 'click', function(ev) {
+            // Attach an event handler to initiate click handlers on new matrix blocks added
+            this.$el.data('matrix').on('blockAdded', function(data) {
+                var $expandBlockLink = self.addMatrixExpandBlockLink(data.$block, modalId);
+                $expandBlockLink.animatedModal(modalOptions);
+                self.attachExpandBlockClickHandler($expandBlockLink);
+            });
+        },
+
+        // Add an event listener to open a matrix block modal
+        attachExpandBlockClickHandler: function($blockLink){
+            this.addListener($blockLink, 'click', function(ev) {
                 ev.preventDefault();
 
                 var $block = $(ev.target).parents('.matrixblock').eq(0),
@@ -47,8 +60,19 @@
             });
         },
 
-        addMatrixExpandBlockLinks: function(modalId){
-            return $('<a title="Expand Matrix" href="#'+modalId+'" class="expand icon expandedmatrix-icon js--expandedmatrix-icon"/>').prependTo(this.$el.find('.actions'));
+        addMatrixExpandBlocksLink: function($blocks, modalId){
+            var self = this;
+                links = [];
+
+            $blocks.each(function(i, block){
+                 links.push(self.addMatrixExpandBlockLink($(block), modalId));
+            });
+
+            return $(links).map(function(){ return this.toArray(); });
+        },
+
+        addMatrixExpandBlockLink: function($block, modalId){
+            return $('<a title="Expand Matrix" href="#'+modalId+'" class="expand icon expandedmatrix-icon js--expandedmatrix-icon"/>').prependTo($block.find('.actions'));
         },
 
         initBlockModal: function($blocks, blockNum){
@@ -72,6 +96,7 @@
         $el: $(),
         $blocks: $(),
         currentBlock: null,
+
         init: function(settings){
 
             var self = this;
@@ -79,7 +104,7 @@
 
             // Define the base modal markup
             this.$el = $(
-                '<div id="'+this.settings.modalId+'">' +
+                '<div id="'+this.settings.modalId+'" class="hidden">' +
                     '<a href="#" class="expandedmatrix-close close-'+this.settings.modalId+'"></a>'+
                     '<a href="#" class="expandedmatrix-nav-icon expandedmatrix-nav-icon--left js--expandedmatrix-left icon"></a>'+
                     '<a href="#" class="expandedmatrix-nav-icon expandedmatrix-nav-icon--right js--expandedmatrix-right icon"></a>'+
@@ -96,28 +121,47 @@
             self.$el.find('.close-'+self.getModalId()).on('click', function(e){
                 self.destroy();
             });
+
+            // Hook into the save event, and re-attach the matrix blocks.
+            Craft.cp.on('beforeSaveShortcut', $.proxy(function() {
+                if( !self.isModalOpen() ) return;
+                Craft.cp.displayNotice('Saving Matrix Blocks...');
+                self.destroy();
+            }));
         },
+
         getEl: function(){
             return this.$el;
         },
+
         getModalId: function(){
             return this.settings.modalId;
         },
+
         getOptions: function(){
             return this.settings.options;
         },
+
+        isModalOpen: function(){
+            return this.$el.hasClass(this.getModalId()+'-on');
+        },
+
         setBlocks: function($blocks){
             return this.$blocks = $blocks;
         },
+
         getBlock: function(blockNum){
             return this.$blocks[blockNum];
         },
+
         getCurrentBlock: function(){
             return $(this.$blocks[this.currentBlock]);
         },
+
         setCurrentBlock: function(blockNum){
             return this.currentBlock = blockNum;
         },
+
         displayBlocks: function(blockNum){
             blockNum = blockNum || 0;
 
@@ -131,12 +175,15 @@
             this.displayBlock(blockNum, this.settings.animations.fadeIn);
             this.attachEventHandlers();
         },
+
         hideBlocksExpandIcons: function(){
             return this.$blocks.find('.js--expandedmatrix-icon').hide();
         },
+
         showBlocksExpandIcons: function(){
             return this.$blocks.find('.js--expandedmatrix-icon').show();
         },
+
         displayPreviousBlock: function(){
             var self = this;
                 $currentBlock = this.getCurrentBlock();
@@ -145,6 +192,7 @@
                 self.displayBlock(self.getPreviousBlock(), self.settings.animations.rightIn);
             });
         },
+
         displayNextBlock: function(){
             var self = this;
                 $currentBlock = this.getCurrentBlock();
@@ -153,6 +201,7 @@
                 self.displayBlock(self.getNextBlock(), self.settings.animations.leftIn);
             });
         },
+
         displayBlock: function(blockNum, animateClasses){
 
             this.clearBlocksAnimationClasses();
@@ -174,6 +223,7 @@
                 $block.removeClass(animateClasses);
             });
         },
+
         attachEventHandlers: function(){
 
             // Left and Right arrow codes
@@ -181,7 +231,7 @@
                 transitionKeyCodes = [39,37];
 
             // Prevent focused Redactor textareas from triggering slide
-            this.$el.find('.redactor-styles').on('keyup', function(e){
+            this.$el.find('.redactor-styles').off('keyup').on('keyup', function(e){
                 if( transitionKeyCodes.indexOf(e.keyCode) > -1 ){
                     e.stopPropagation();
                 }
@@ -205,18 +255,18 @@
                 excludedElements: excludedElements
             });
 
-            $('.js--expandedmatrix-left').on('click', function(e){
+            $('.js--expandedmatrix-left').off('click').on('click', function(e){
                 e.preventDefault();
                 self.displayPreviousBlock();
             });
 
-            $('.js--expandedmatrix-right').on('click', function(e){
+            $('.js--expandedmatrix-right').off('click').on('click', function(e){
                 e.preventDefault();
                 self.displayNextBlock();
             });
 
             // On left/right arrow keypress
-            $(document).on('keyup.expandedmatrix', function(e){
+            $(document).off('keyup.expandedmatrix').on('keyup.expandedmatrix', function(e){
 
                 // Close the modal when esc is pressed
                 if(e.keyCode == 27) {
@@ -238,12 +288,14 @@
                 }
             });
         },
+
         clearBlocksAnimationClasses: function(){
             var self = this;
             $.each(self.settings.animations, function(k,animClass){
                 self.$blocks.removeClass(animClass);
             });
         },
+
         destroy: function(){
 
             var self = this,
@@ -272,23 +324,29 @@
             // Remove event handler
             $(document).off('keyup.expandedmatrix');
         },
+
         getPreviousBlock: function(){
             var numBlocks = this.$blocks.length - 1;
             var prevBlock = this.currentBlock - 1;
             return prevBlock < 0 ? numBlocks : prevBlock;
         },
+
         getNextBlock: function(){
             var numBlocks = this.$blocks.length - 1;
             var nextBlock = this.currentBlock + 1;
             return nextBlock > numBlocks ? 0 : nextBlock;
-        },
+        }
     }, {
         defaults: {
             modalId: 'expandedMatrixModal',
             options: {
                 color: '#333f4d',
                 zIndexIn: '100',
-                animationDuration: '.3s'
+                animationDuration: '.3s',
+                beforeOpen: function(){
+                    var $modal = $('#'+this.modalTarget);
+                    $modal.removeClass('hidden');
+                }
             },
             animations: {
                 leftIn: 'animated fadeInRight speed-300ms',
@@ -301,10 +359,12 @@
         }
     });
 
-    var $matrixFields = $('[data-type="craft\\\\fields\\\\Matrix"]');
-    $matrixFields.each(function(i, matrixField){
-        new Craft.ExpandedMatrix({$el: $(matrixField)});
-    });
+    // Initialise the expanded matrix after the matrix input has initialised
+    var CraftMatrixInputInit = Craft.MatrixInput.prototype.init;
+    Craft.MatrixInput.prototype.init = function(id, blockTypes, inputNamePrefix, maxBlocks){
+        CraftMatrixInputInit.apply(this, arguments);
+        new Craft.ExpandedMatrix({$el: this.$container});
+    };
 
 })(jQuery);
 

@@ -5,6 +5,7 @@ namespace thejoshsmith\craftexpandedmatrix\web\assets;
 use Craft;
 use craft\web\AssetBundle;
 use craft\web\assets\cp\CpAsset;
+use craft\web\assets\matrix\MatrixAsset;
 
 /**
  * Expanded Matrix AssetBundle
@@ -23,6 +24,7 @@ class ExpandedMatrixAsset extends AssetBundle
 
         $this->depends = [
             CpAsset::class,
+            MatrixAsset::class
         ];
 
         $this->js = [
