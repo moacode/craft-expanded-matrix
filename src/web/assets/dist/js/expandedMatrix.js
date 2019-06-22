@@ -177,11 +177,15 @@
         },
 
         hideBlocksExpandIcons: function(){
-            return this.$blocks.find('.js--expandedmatrix-icon').hide();
+            this.$blocks.find('.js--expandedmatrix-icon').hide();
+            this.$blocks.find('.actions').hide();
+            this.$blocks.find('.actions').siblings('.checkbox').hide();
         },
 
         showBlocksExpandIcons: function(){
-            return this.$blocks.find('.js--expandedmatrix-icon').show();
+            this.$blocks.find('.js--expandedmatrix-icon').show();
+            this.$blocks.find('.actions').show();
+            this.$blocks.find('.actions').siblings('.checkbox').show();
         },
 
         displayPreviousBlock: function(){

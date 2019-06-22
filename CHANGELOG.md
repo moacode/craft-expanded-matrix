@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.3 - 2019-06-22
+### Changed
+- Matrix block action icons and checbox are now hidden when open in the modal
+
 ## 1.0.2 - 2019-06-21
 ### Changed
 - Plugin is now initialised after the matrix object is created
